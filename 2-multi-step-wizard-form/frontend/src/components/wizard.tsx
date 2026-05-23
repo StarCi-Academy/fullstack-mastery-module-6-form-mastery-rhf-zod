@@ -1,4 +1,5 @@
 "use client"
+import { Button, Input, Label, TextField } from "@heroui/react"
 
 import { useState } from "react"
 import { FormProvider, useForm, useFormContext } from "react-hook-form"
@@ -23,11 +24,11 @@ function StepAccount(): JSX.Element {
     return (
         <fieldset data-testid="step-account">
             <legend>Account</legend>
-            <input data-testid="email" placeholder="Email" {...register("account.email")} />
+            <Input data-testid="email" placeholder="Email" {...register("account.email")} />
             {errors.account?.email && (
                 <p data-testid="email-error">{errors.account.email.message}</p>
             )}
-            <input
+            <Input
                 data-testid="password"
                 type="password"
                 placeholder="Password"
@@ -51,11 +52,11 @@ function StepProfile(): JSX.Element {
     return (
         <fieldset data-testid="step-profile">
             <legend>Profile</legend>
-            <input data-testid="full-name" placeholder="Full name" {...register("profile.fullName")} />
+            <Input data-testid="full-name" placeholder="Full name" {...register("profile.fullName")} />
             {errors.profile?.fullName && (
                 <p data-testid="full-name-error">{errors.profile.fullName.message}</p>
             )}
-            <input
+            <Input
                 data-testid="age"
                 type="number"
                 placeholder="Age"
@@ -75,7 +76,7 @@ function StepPreferences(): JSX.Element {
         <fieldset data-testid="step-preferences">
             <legend>Preferences</legend>
             <label>
-                <input data-testid="newsletter" type="checkbox" {...register("preferences.newsletter")} />{" "}
+                <Input data-testid="newsletter" type="checkbox" {...register("preferences.newsletter")} />{" "}
                 Subscribe to newsletter
             </label>
             <label>
@@ -157,19 +158,19 @@ export function Wizard(): JSX.Element {
 
                 <div>
                     {step > 0 && (
-                        <button type="button" data-testid="back" onClick={goBack}>
+                        <Button type="button" data-testid="back" onClick={goBack}>
                             Back
-                        </button>
+                        </Button>
                     )}
                     {step < 2 && (
-                        <button type="button" data-testid="next" onClick={goNext}>
+                        <Button type="button" data-testid="next" onClick={goNext}>
                             Next
-                        </button>
+                        </Button>
                     )}
                     {step === 2 && (
-                        <button type="submit" data-testid="submit">
+                        <Button type="submit" data-testid="submit">
                             Submit
-                        </button>
+                        </Button>
                     )}
                 </div>
 

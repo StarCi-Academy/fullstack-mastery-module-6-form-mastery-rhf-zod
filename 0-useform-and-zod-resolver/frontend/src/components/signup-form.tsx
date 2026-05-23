@@ -1,4 +1,5 @@
 "use client"
+import { Button, Input, Label, TextField } from "@heroui/react"
 
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -28,26 +29,34 @@ export function SignupForm(): JSX.Element {
     }
 
     return (
-        <form onSubmit={handleSubmit(onValid)} data-testid="signup-form">
-            <label>
-                Email
-                <input data-testid="email" {...register("email")} />
-            </label>
-            {formState.errors.email && (
-                <p data-testid="email-error">{formState.errors.email.message}</p>
-            )}
+        <form
+            onSubmit={handleSubmit(onValid)}
+            data-testid="signup-form"
+            className="flex flex-col gap-4 max-w-md"
+        >
+            <TextField isInvalid={!!formState.errors.email}>
+                <Label>Email</Label>
+                <Input data-testid="email" type="email" {...register("email")} />
+                {formState.errors.email && (
+                    <p data-testid="email-error" className="text-sm text-danger">
+                        {formState.errors.email.message}
+                    </p>
+                )}
+            </TextField>
 
-            <label>
-                Password
-                <input data-testid="password" type="password" {...register("password")} />
-            </label>
-            {formState.errors.password && (
-                <p data-testid="password-error">{formState.errors.password.message}</p>
-            )}
+            <TextField isInvalid={!!formState.errors.password}>
+                <Label>Password</Label>
+                <Input data-testid="password" type="password" {...register("password")} />
+                {formState.errors.password && (
+                    <p data-testid="password-error" className="text-sm text-danger">
+                        {formState.errors.password.message}
+                    </p>
+                )}
+            </TextField>
 
-            <button data-testid="submit" disabled={formState.isSubmitting}>
+            <Button type="submit" data-testid="submit" isDisabled={formState.isSubmitting}>
                 {formState.isSubmitting ? "Submitting..." : "Sign up"}
-            </button>
+            </Button>
 
             {createdId !== null && (
                 <p data-testid="success">Created user #{createdId}</p>

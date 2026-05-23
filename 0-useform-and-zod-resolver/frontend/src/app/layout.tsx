@@ -1,4 +1,6 @@
 import type { ReactNode } from "react"
+import "./globals.css"
+import { HeroUIProvider } from "@/components/providers"
 
 /**
  * Root layout — không có provider phụ trợ, mỗi page render độc lập.
@@ -7,7 +9,11 @@ import type { ReactNode } from "react"
 export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
     return (
         <html lang="en">
-            <body>{children}</body>
+            <body>
+                <HeroUIProvider>
+                    {children}
+                </HeroUIProvider>
+            </body>
         </html>
     )
 }

@@ -1,4 +1,5 @@
 "use client"
+import { Input, Label, TextField } from "@heroui/react"
 
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -57,7 +58,7 @@ export function UsernameForm(): JSX.Element {
         <form data-testid="username-form" onSubmit={(e) => e.preventDefault()}>
             <label>
                 Username
-                <input data-testid="username" autoComplete="off" {...register("username")} />
+                <Input data-testid="username" autoComplete="off" {...register("username")} />
             </label>
             {formState.errors.username && (
                 <p data-testid="username-error">{formState.errors.username.message}</p>

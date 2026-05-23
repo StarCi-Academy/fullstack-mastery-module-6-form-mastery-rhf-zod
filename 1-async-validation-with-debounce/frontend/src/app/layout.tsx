@@ -1,4 +1,6 @@
 import type { ReactNode } from "react"
+import "./globals.css"
+import { HeroUIProvider } from "@/components/providers"
 
 /**
  * Root layout đơn giản (EN: simple root layout).
@@ -6,7 +8,11 @@ import type { ReactNode } from "react"
 export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
     return (
         <html lang="en">
-            <body>{children}</body>
+            <body>
+                <HeroUIProvider>
+                    {children}
+                </HeroUIProvider>
+            </body>
         </html>
     )
 }

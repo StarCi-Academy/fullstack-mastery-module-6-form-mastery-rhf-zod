@@ -1,4 +1,5 @@
 "use client"
+import { Button, Input, Label, TextField } from "@heroui/react"
 
 import { useState } from "react"
 import { useFieldArray, useForm } from "react-hook-form"
@@ -38,7 +39,7 @@ export function InvoiceForm(): JSX.Element {
 
     return (
         <form data-testid="invoice-form" onSubmit={handleSubmit(onValid)}>
-            <input data-testid="customer" placeholder="Customer" {...register("customer")} />
+            <Input data-testid="customer" placeholder="Customer" {...register("customer")} />
             {errors.customer && <p data-testid="customer-error">{errors.customer.message}</p>}
 
             <table>
@@ -54,54 +55,54 @@ export function InvoiceForm(): JSX.Element {
                     {fields.map((field, index) => (
                         <tr key={field.id} data-testid={`row-${index}`}>
                             <td>
-                                <input
+                                <Input
                                     data-testid={`desc-${index}`}
                                     {...register(`items.${index}.description`)}
                                 />
                             </td>
                             <td>
-                                <input
+                                <Input
                                     data-testid={`qty-${index}`}
                                     type="number"
                                     {...register(`items.${index}.quantity`)}
                                 />
                             </td>
                             <td>
-                                <input
+                                <Input
                                     data-testid={`price-${index}`}
                                     type="number"
                                     {...register(`items.${index}.unitPrice`)}
                                 />
                             </td>
                             <td>
-                                <button
+                                <Button
                                     type="button"
                                     data-testid={`remove-${index}`}
                                     onClick={() => remove(index)}
                                 >
                                     Remove
-                                </button>
+                                </Button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
 
-            <button
+            <Button
                 type="button"
                 data-testid="add-row"
                 onClick={() => append({ description: "", quantity: 1, unitPrice: 0 })}
             >
                 Add row
-            </button>
+            </Button>
 
             {errors.items && typeof errors.items.message === "string" && (
                 <p data-testid="items-error">{errors.items.message}</p>
             )}
 
-            <button data-testid="submit" disabled={isSubmitting}>
+            <Button data-testid="submit" isDisabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Submit"}
-            </button>
+            </Button>
 
             {result !== null && (
                 <p data-testid="success">Created invoice #{result.id} total={result.total}</p>

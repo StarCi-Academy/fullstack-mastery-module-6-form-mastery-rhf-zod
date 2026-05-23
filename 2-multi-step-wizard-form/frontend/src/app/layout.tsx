@@ -1,9 +1,15 @@
 import type { ReactNode } from "react"
+import "./globals.css"
+import { HeroUIProvider } from "@/components/providers"
 
 export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
     return (
         <html lang="en">
-            <body>{children}</body>
+            <body>
+                <HeroUIProvider>
+                    {children}
+                </HeroUIProvider>
+            </body>
         </html>
     )
 }

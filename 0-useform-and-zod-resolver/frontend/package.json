@@ -11,10 +11,14 @@
         "test:e2e:headed": "playwright test --config ../.playwright/playwright.config.ts --headed"
     },
     "dependencies": {
+        "next": "^15.0.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "@heroui/react": "^3.0.2",
+        "@heroui/styles": "^3.0.2",
+        "framer-motion": "^11.0.0",
+        "next-themes": "^0.4.6",
         "@hookform/resolvers": "^3.9.0",
-        "next": "^14.2.5",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
         "react-hook-form": "^7.52.0",
         "zod": "^3.23.8"
     },
@@ -23,6 +27,8 @@
         "@types/node": "^20.14.10",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
-        "typescript": "^5.5.3"
+        "typescript": "^5.5.3",
+        "tailwindcss": "^4.0.0",
+        "@tailwindcss/postcss": "^4.0.0"
     }
 }
