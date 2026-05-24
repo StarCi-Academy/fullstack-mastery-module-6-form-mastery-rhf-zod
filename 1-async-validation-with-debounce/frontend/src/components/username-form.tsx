@@ -1,5 +1,5 @@
 "use client"
-import { Input, Label, TextField } from "@heroui/react"
+import { Description, FieldError, Input, Label, TextField } from "@heroui/react"
 
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -55,14 +55,22 @@ export function UsernameForm(): JSX.Element {
     }, [username, formState.errors.username])
 
     return (
-        <form data-testid="username-form" onSubmit={(e) => e.preventDefault()}>
-            <label>
-                Username
+        <form
+            data-testid="username-form"
+            onSubmit={(e) => e.preventDefault()}
+            className="flex flex-col gap-2 max-w-md"
+        >
+            <TextField isInvalid={!!formState.errors.username}>
+                <Label>Username</Label>
                 <Input data-testid="username" autoComplete="off" {...register("username")} />
-            </label>
-            {formState.errors.username && (
-                <p data-testid="username-error">{formState.errors.username.message}</p>
-            )}
+                {formState.errors.username ? (
+                    <FieldError data-testid="username-error">
+                        {formState.errors.username.message}
+                    </FieldError>
+                ) : (
+                    <Description>Lowercase letters or digits, 3–20 chars.</Description>
+                )}
+            </TextField>
             <p data-testid="availability" data-state={availability}>
                 {availability === "checking" && "Checking..."}
                 {availability === "available" && "Available"}

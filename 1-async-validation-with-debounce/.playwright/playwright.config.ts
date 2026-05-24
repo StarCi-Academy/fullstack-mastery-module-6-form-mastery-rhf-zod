@@ -12,13 +12,22 @@ export default defineConfig({
         trace: "on-first-retry",
         screenshot: "only-on-failure",
     },
-    webServer: {
-        command: "npm run dev",
-        cwd: "../frontend",
-        port: 3001,
-        reuseExistingServer: !process.env.CI,
-        timeout: 60_000,
-    },
+    webServer: [
+        {
+            command: "npm install --prefer-offline && npx nest start",
+            cwd: "../backend",
+            port: 3000,
+            reuseExistingServer: !process.env.CI,
+            timeout: 120_000,
+        },
+        {
+            command: "npm install --prefer-offline && npm run dev",
+            cwd: "../frontend",
+            port: 3001,
+            reuseExistingServer: !process.env.CI,
+            timeout: 120_000,
+        },
+    ],
     projects: [
         {
             name: "chromium",

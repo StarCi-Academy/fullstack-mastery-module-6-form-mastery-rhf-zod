@@ -1,5 +1,5 @@
 "use client"
-import { Button, Input, Label, TextField } from "@heroui/react"
+import { Button, Description, FieldError, Input, Label, TextField } from "@heroui/react"
 
 import { useState } from "react"
 import { useForm } from "react-hook-form"
@@ -8,8 +8,8 @@ import { signupSchema, type SignupInput } from "@/lib/schemas"
 import { signup } from "@/lib/api"
 
 /**
- * SignupForm — useForm + zodResolver, hiển thị lỗi inline trên blur.
- * (EN: SignupForm — useForm + zodResolver, shows inline errors on blur.)
+ * SignupForm — useForm + zodResolver, hiển thị lỗi inline trên blur qua HeroUI FieldError.
+ * (EN: SignupForm — useForm + zodResolver, surfaces inline errors on blur via HeroUI FieldError.)
  */
 export function SignupForm(): JSX.Element {
     const [createdId, setCreatedId] = useState<number | null>(null)
@@ -37,20 +37,24 @@ export function SignupForm(): JSX.Element {
             <TextField isInvalid={!!formState.errors.email}>
                 <Label>Email</Label>
                 <Input data-testid="email" type="email" {...register("email")} />
-                {formState.errors.email && (
-                    <p data-testid="email-error" className="text-sm text-danger">
+                {formState.errors.email ? (
+                    <FieldError data-testid="email-error">
                         {formState.errors.email.message}
-                    </p>
+                    </FieldError>
+                ) : (
+                    <Description>We'll use this email to sign you in.</Description>
                 )}
             </TextField>
 
             <TextField isInvalid={!!formState.errors.password}>
                 <Label>Password</Label>
                 <Input data-testid="password" type="password" {...register("password")} />
-                {formState.errors.password && (
-                    <p data-testid="password-error" className="text-sm text-danger">
+                {formState.errors.password ? (
+                    <FieldError data-testid="password-error">
                         {formState.errors.password.message}
-                    </p>
+                    </FieldError>
+                ) : (
+                    <Description>At least 8 characters.</Description>
                 )}
             </TextField>
 

@@ -1,8 +1,18 @@
 "use client"
-import { Button, Input, Label, TextField } from "@heroui/react"
+import {
+    Button,
+    Checkbox,
+    Description,
+    FieldError,
+    Input,
+    Label,
+    ListBox,
+    Select,
+    TextField,
+} from "@heroui/react"
 
 import { useState } from "react"
-import { FormProvider, useForm, useFormContext } from "react-hook-form"
+import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
     wizardSchema,
@@ -22,21 +32,35 @@ function StepAccount(): JSX.Element {
         formState: { errors },
     } = useFormContext<WizardInput>()
     return (
-        <fieldset data-testid="step-account">
+        <fieldset data-testid="step-account" className="flex flex-col gap-3">
             <legend>Account</legend>
-            <Input data-testid="email" placeholder="Email" {...register("account.email")} />
-            {errors.account?.email && (
-                <p data-testid="email-error">{errors.account.email.message}</p>
-            )}
-            <Input
-                data-testid="password"
-                type="password"
-                placeholder="Password"
-                {...register("account.password")}
-            />
-            {errors.account?.password && (
-                <p data-testid="password-error">{errors.account.password.message}</p>
-            )}
+            <TextField isInvalid={!!errors.account?.email}>
+                <Label>Email</Label>
+                <Input data-testid="email" placeholder="Email" {...register("account.email")} />
+                {errors.account?.email ? (
+                    <FieldError data-testid="email-error">
+                        {errors.account.email.message}
+                    </FieldError>
+                ) : (
+                    <Description>We'll use this to sign you in.</Description>
+                )}
+            </TextField>
+            <TextField isInvalid={!!errors.account?.password}>
+                <Label>Password</Label>
+                <Input
+                    data-testid="password"
+                    type="password"
+                    placeholder="Password"
+                    {...register("account.password")}
+                />
+                {errors.account?.password ? (
+                    <FieldError data-testid="password-error">
+                        {errors.account.password.message}
+                    </FieldError>
+                ) : (
+                    <Description>At least 8 characters.</Description>
+                )}
+            </TextField>
         </fieldset>
     )
 }
@@ -50,42 +74,97 @@ function StepProfile(): JSX.Element {
         formState: { errors },
     } = useFormContext<WizardInput>()
     return (
-        <fieldset data-testid="step-profile">
+        <fieldset data-testid="step-profile" className="flex flex-col gap-3">
             <legend>Profile</legend>
-            <Input data-testid="full-name" placeholder="Full name" {...register("profile.fullName")} />
-            {errors.profile?.fullName && (
-                <p data-testid="full-name-error">{errors.profile.fullName.message}</p>
-            )}
-            <Input
-                data-testid="age"
-                type="number"
-                placeholder="Age"
-                {...register("profile.age")}
-            />
-            {errors.profile?.age && <p data-testid="age-error">{errors.profile.age.message}</p>}
+            <TextField isInvalid={!!errors.profile?.fullName}>
+                <Label>Full name</Label>
+                <Input
+                    data-testid="full-name"
+                    placeholder="Full name"
+                    {...register("profile.fullName")}
+                />
+                {errors.profile?.fullName ? (
+                    <FieldError data-testid="full-name-error">
+                        {errors.profile.fullName.message}
+                    </FieldError>
+                ) : (
+                    <Description>Your display name.</Description>
+                )}
+            </TextField>
+            <TextField isInvalid={!!errors.profile?.age}>
+                <Label>Age</Label>
+                <Input
+                    data-testid="age"
+                    type="number"
+                    placeholder="Age"
+                    {...register("profile.age")}
+                />
+                {errors.profile?.age ? (
+                    <FieldError data-testid="age-error">{errors.profile.age.message}</FieldError>
+                ) : (
+                    <Description>Must be 13 or older.</Description>
+                )}
+            </TextField>
         </fieldset>
     )
 }
 
 /**
- * Step 3 — Preferences fields (EN: Step 3 — Preferences fields).
+ * Step 3 — Preferences (Checkbox + Select compound qua RHF Controller).
+ * (EN: Step 3 — Preferences [Checkbox + Select compound via RHF Controller].)
  */
 function StepPreferences(): JSX.Element {
-    const { register } = useFormContext<WizardInput>()
+    const { control } = useFormContext<WizardInput>()
     return (
-        <fieldset data-testid="step-preferences">
+        <fieldset data-testid="step-preferences" className="flex flex-col gap-3">
             <legend>Preferences</legend>
-            <label>
-                <Input data-testid="newsletter" type="checkbox" {...register("preferences.newsletter")} />{" "}
-                Subscribe to newsletter
-            </label>
-            <label>
-                Theme
-                <select data-testid="theme" {...register("preferences.theme")}>
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
-                </select>
-            </label>
+            <Controller
+                control={control}
+                name="preferences.newsletter"
+                render={({ field }) => (
+                    <Checkbox
+                        data-testid="newsletter"
+                        isSelected={field.value}
+                        onChange={field.onChange}
+                    >
+                        <Checkbox.Control>
+                            <Checkbox.Indicator />
+                        </Checkbox.Control>
+                        <Checkbox.Content>
+                            <Label>Subscribe to newsletter</Label>
+                        </Checkbox.Content>
+                    </Checkbox>
+                )}
+            />
+            <Controller
+                control={control}
+                name="preferences.theme"
+                render={({ field }) => (
+                    <Select
+                        data-testid="theme"
+                        selectedKey={field.value}
+                        onSelectionChange={(key) => field.onChange(key as "light" | "dark")}
+                    >
+                        <Label>Theme</Label>
+                        <Select.Trigger>
+                            <Select.Value />
+                            <Select.Indicator />
+                        </Select.Trigger>
+                        <Select.Popover>
+                            <ListBox>
+                                <ListBox.Item id="light" textValue="Light">
+                                    Light
+                                    <ListBox.ItemIndicator />
+                                </ListBox.Item>
+                                <ListBox.Item id="dark" textValue="Dark">
+                                    Dark
+                                    <ListBox.ItemIndicator />
+                                </ListBox.Item>
+                            </ListBox>
+                        </Select.Popover>
+                    </Select>
+                )}
+            />
         </fieldset>
     )
 }
@@ -141,7 +220,6 @@ export function Wizard(): JSX.Element {
      * (EN: Final submit — calls backend with the complete payload.)
      */
     const onValid = async (data: WizardInput): Promise<void> => {
-        // Bảo đảm preferences pass schema (EN: ensure preferences passes schema)
         const prefs = preferencesSchema.safeParse(data.preferences)
         if (!prefs.success) return
         const res = await submitWizard(data)
@@ -150,20 +228,34 @@ export function Wizard(): JSX.Element {
 
     return (
         <FormProvider {...methods}>
-            <form data-testid="wizard" onSubmit={methods.handleSubmit(onValid)}>
+            <form
+                data-testid="wizard"
+                onSubmit={methods.handleSubmit(onValid)}
+                className="flex flex-col gap-4 max-w-md"
+            >
                 <p data-testid="step-indicator">Step {step + 1} of 3</p>
-                {step === 0 && <StepAccount />}
-                {step === 1 && <StepProfile />}
-                {step === 2 && <StepPreferences />}
+                {/* Render mọi step nhưng ẩn step không active — giữ DOM input để khi Back,
+                    giá trị typed vẫn còn (RHF state + native input value đều persist).
+                    (EN: Render every step but hide inactive ones so typed values survive Back —
+                    both RHF state and native input value persist across step changes.) */}
+                <div style={{ display: step === 0 ? "block" : "none" }}>
+                    <StepAccount />
+                </div>
+                <div style={{ display: step === 1 ? "block" : "none" }}>
+                    <StepProfile />
+                </div>
+                <div style={{ display: step === 2 ? "block" : "none" }}>
+                    <StepPreferences />
+                </div>
 
-                <div>
+                <div className="flex gap-2">
                     {step > 0 && (
-                        <Button type="button" data-testid="back" onClick={goBack}>
+                        <Button type="button" data-testid="back" onPress={goBack}>
                             Back
                         </Button>
                     )}
                     {step < 2 && (
-                        <Button type="button" data-testid="next" onClick={goNext}>
+                        <Button type="button" data-testid="next" onPress={goNext}>
                             Next
                         </Button>
                     )}
