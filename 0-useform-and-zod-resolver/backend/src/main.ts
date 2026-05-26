@@ -1,14 +1,18 @@
 import { NestFactory } from "@nestjs/core"
+import { ConfigService } from "@nestjs/config"
 import { AppModule } from "./app.module"
 
 /**
- * Bootstrap NestJS stub trên cổng 3000, bật CORS cho Next.js (3001).
- * (EN: Bootstrap NestJS stub on port 3000 with CORS enabled for Next.js [3001].)
+ * Bootstrap NestJS stub — port + CORS origin đọc từ ConfigService (env defaults).
+ * (EN: Bootstrap NestJS stub — port + CORS origin read from ConfigService with env defaults.)
  */
 async function bootstrap(): Promise<void> {
     const app = await NestFactory.create(AppModule)
-    app.enableCors({ origin: "http://localhost:3001" })
-    await app.listen(3000)
+    const config = app.get(ConfigService)
+    const port = Number(config.get<string>("PORT") ?? "3000")
+    const corsOrigin = config.get<string>("CORS_ORIGIN") ?? "http://localhost:3001"
+    app.enableCors({ origin: corsOrigin })
+    await app.listen(port)
 }
 
 bootstrap()
