@@ -6,9 +6,18 @@ import { UsernameForm } from "@/components"
  */
 export default function HomePage(): JSX.Element {
     return (
-        <main>
-            <h1>Pick a username</h1>
-            <UsernameForm />
+        <main className="min-h-screen flex items-center justify-center p-6 bg-background">
+            <div className="w-full max-w-md">
+                <div className="mb-6 text-center">
+                    <h1 className="text-3xl font-bold tracking-tight text-foreground">
+                        Pick a username
+                    </h1>
+                    <p className="mt-2 text-sm text-default-500">
+                        Async validation with debounce
+                    </p>
+                </div>
+                <UsernameForm />
+            </div>
         </main>
     )
 }

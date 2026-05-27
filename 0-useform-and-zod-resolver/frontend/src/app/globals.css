@@ -21,8 +21,3 @@ body {
   font-family: system-ui, sans-serif;
 }
 
-main {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 1.5rem;
-}
